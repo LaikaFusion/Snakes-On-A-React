@@ -24,27 +24,34 @@ class App extends Component {
     switch (e.key) {
       case "ArrowLeft":
       case "a":
-      this.setState({
-        direction: 'left'
-      })
+      if(this.state.direction !=='right'){
+        this.setState({
+          direction: 'left'
+        })
+      }
+      
         break;
       case "ArrowRight":
       case "d":
+      if(this.state.direction !=='left'){
       this.setState({
         direction: 'right'
       })
+    }
         break;
       case "ArrowUp":
       case "w":
+      if(this.state.direction !=='down'){
       this.setState({
         direction: 'up'
-      })
+      })}
         break;
       case "ArrowDown":
       case "s":
+      if(this.state.direction !=='up'){
       this.setState({
         direction: 'down'
-      })
+      })}
         break;
       default:
         break;
@@ -80,12 +87,19 @@ class App extends Component {
   }
   animate = ()=>{
     const snakeMod = this.state.snake.slice();
-    const toRemove = snakeMod.pop();
-
+    let toRemove = 0;
     switch (this.state.direction) {
 
       case 'right':
-        snakeMod.unshift((snakeMod[0])+1);
+        const nextPixelRight = (snakeMod[0])+1
+        if(nextPixelRight !== this.state.food){
+           toRemove = snakeMod.pop();   
+        }
+        else{
+          this.randomFoodSpot();
+        }
+
+        snakeMod.unshift(nextPixelRight);
         this.setState({
           snake : snakeMod,
           removePixel: toRemove
@@ -95,7 +109,15 @@ class App extends Component {
         })
         break;
         case 'left':
-        snakeMod.unshift((snakeMod[0])-1);
+        const nextPixelLeft = (snakeMod[0])-1
+        if(nextPixelLeft !== this.state.food){
+           toRemove = snakeMod.pop();
+        }
+        else{
+          this.randomFoodSpot();
+        }
+
+        snakeMod.unshift(nextPixelLeft);
         this.setState({
           snake : snakeMod,
           removePixel: toRemove
@@ -105,7 +127,14 @@ class App extends Component {
         })
         break;
         case 'up':
-        snakeMod.unshift((snakeMod[0])-this.state.ylinesize);
+        const nextPixelUp = (snakeMod[0])-this.state.ylinesize;
+        if(nextPixelUp !== this.state.food){
+           toRemove = snakeMod.pop();
+        }
+        else{
+          this.randomFoodSpot();
+        }
+        snakeMod.unshift(nextPixelUp);
         this.setState({
           snake : snakeMod,
           removePixel: toRemove
@@ -115,7 +144,14 @@ class App extends Component {
         })
         break;
         case 'down':
-        snakeMod.unshift((snakeMod[0])+this.state.ylinesize);
+        const nextPixelDown = (snakeMod[0])+this.state.ylinesize;
+        if(nextPixelDown !== this.state.food){
+           toRemove = snakeMod.pop();
+        }
+        else{
+          this.randomFoodSpot();
+        }
+        snakeMod.unshift(nextPixelDown);
         this.setState({
           snake : snakeMod,
           removePixel: toRemove
@@ -134,9 +170,6 @@ class App extends Component {
     this.state.snake.forEach(element => {
       pixelsUpdate[element] = {on:true}
     })
-
-
-   
     pixelsUpdate[this.state.removePixel] = {on:false}
     pixelsUpdate[this.state.food] = {on:true}
 
