@@ -6,6 +6,6 @@
 #    that is where we will look for package.json/.nvmrc/etc not repo root!
 
 [build]
-  base    = "./ultimate-tic-tac-toe"
-  publish = "./ultimate-tic-tac-toe/build"
+  base    = "./snake"
+  publish = "./snake/build"
   command = "yarn build"
