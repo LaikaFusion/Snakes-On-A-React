@@ -7,6 +7,7 @@
   display:grid;
   grid-template-columns: repeat(21, 40px);
   grid-template-rows: repeat(12, 40px);
+  border: black 1px solid;
 }
 .on{
   background: black;
