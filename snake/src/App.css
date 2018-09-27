@@ -1,67 +1,67 @@
-@import url('https://fonts.googleapis.com/css?family=Press+Start+2P');
-
+@import url("https://fonts.googleapis.com/css?family=Press+Start+2P");
 
 .App {
   text-align: center;
-  display:flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.screen{
+.screen {
   margin: 30px 30px 20px;
-  display:grid;
-  grid-template-columns: repeat(21, 30px);
-  grid-template-rows: repeat(12, 30px);
+  display: grid;
+  grid-template-columns: repeat(28, 30px);
+  grid-template-rows: repeat(18, 30px);
   border: solid 10px #000;
-
-  grid-row-gap: 2px;
-  grid-column-gap: 2px;
-  
-  
+  grid-row-gap: 3px;
+  grid-column-gap: 3px;
 }
-.screenContainer{
+.screenContainer {
   background: #7d8c73;
   width: auto;
   border: 40px silver solid;
   margin-top: 30px;
   position: relative;
-
 }
-.on{
+.on {
   background: black;
+  opacity: 1;
+  transition: 0.2s;
 }
-.score{
+.off {
+  background: black;
+  opacity: 0;
+  transition: 0.2s;
+}
+.score {
   font-size: 30px;
-  font-family: 'Press Start 2P', monospace;
+  font-family: "Press Start 2P", monospace;
   margin-bottom: 10px;
-
 }
-button{
+button {
   font-size: 30px;
-  font-family: 'Press Start 2P', monospace;
+  font-family: "Press Start 2P", monospace;
   background: none;
   border: none;
   text-decoration: none;
-
 }
-.buttonContainer{
+.buttonContainer {
   position: absolute;
   top: 50%;
   margin-left: auto;
-margin-right: auto;
-left: 0;
-right: 0;
+  margin-right: auto;
+  left: 0;
+  right: 0;
 }
-.hidden{
-  display:none;
+.hidden {
+  display: none;
 }
 
-.pixel{
-  display:grid;
-  grid-template-columns: repeat(2, 15px);
-  grid-template-rows: repeat(2, 15px);
+.pixel {
+  display: grid;
+  grid-template-columns: repeat(3, 10px);
+  grid-template-rows: repeat(3, 10px);
   grid-row-gap: 1px;
   grid-column-gap: 1px;
 }

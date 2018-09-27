@@ -2,22 +2,28 @@ import React, { Component } from "react";
 import "./App.css";
 import Screen from "./components/Screen";
 
+const xline = 18;
+const yline = 28;
+const freshScreen = Array(xline*yline).fill({ on: false, food:false });
+
+
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pixels: Array(252).fill({ on: false }),
+      pixels: freshScreen,
       direction: "right",
-      snake: [136, 135, 134, 133],
+      snake: [210, 209, 208, 207],
       food: -1,
-      ylinesize: 21,
-      xlinesize: 12,
+      ylinesize: yline,
+      xlinesize: xline,
       removePixel: 0,
       nextPixel: 0,
       intervalId: 0,
       intervalAmount: 200,
       gameOver: false,
-      gameStarted: false
+      gameStarted: false,
+      keyblock: false
     };
   }
   componentWillMount() {
@@ -26,12 +32,16 @@ class App extends Component {
     this.randomFoodSpot();
   }
   handleKeypress = e => {
+    if(this.state.keyblock){
+      return;
+    }
     switch (e.key) {
       case "ArrowLeft":
       case "a":
         if (this.state.direction !== "right") {
           this.setState({
-            direction: "left"
+            direction: "left",
+            keyblock:true
           });
         }
 
@@ -40,7 +50,8 @@ class App extends Component {
       case "d":
         if (this.state.direction !== "left") {
           this.setState({
-            direction: "right"
+            direction: "right",
+            keyblock:true
           });
         }
         break;
@@ -48,7 +59,8 @@ class App extends Component {
       case "w":
         if (this.state.direction !== "down") {
           this.setState({
-            direction: "up"
+            direction: "up",
+            keyblock:true
           });
         }
         break;
@@ -56,7 +68,8 @@ class App extends Component {
       case "s":
         if (this.state.direction !== "up") {
           this.setState({
-            direction: "down"
+            direction: "down",
+            keyblock:true
           });
         }
         break;
@@ -68,9 +81,9 @@ class App extends Component {
     this.setState({
       gameOver: false,
       direction: "right",
-      snake: [136, 135, 134, 133],
+      snake: [210, 209, 208, 207],
       intervalAmount: 200,
-      pixels: Array(252).fill({ on: false }),
+      pixels: freshScreen,
       gameStarted: true
     },()=>{
 
@@ -78,7 +91,7 @@ class App extends Component {
       this.state.snake.forEach(element => {
         gameStart[element] = { on: true };
       });
-      gameStart[this.state.food] = { on: true };
+      gameStart[this.state.food] = { food: true };
       this.setState(
         {
           pixels: gameStart
@@ -122,22 +135,22 @@ class App extends Component {
         }
         if (nextPixelRight !== this.state.food) {
           toRemove = snakeMod.pop();
+          snakeMod.unshift(nextPixelRight);
         } else {
           snakeMod.unshift(nextPixelRight);
-          nextPixelRight = snakeMod[0] + 1;
           this.randomFoodSpot();
           this.goFaster();
         }
 
-        if (nextPixelRight % 21 === 0) {
+        if (nextPixelRight % this.state.ylinesize === 0) {
           this.gameOver();
           break;
         }
-        snakeMod.unshift(nextPixelRight);
         this.setState(
           {
             snake: snakeMod,
-            removePixel: toRemove
+            removePixel: toRemove,
+            keyblock: false
           },
           () => {
             this.updateScreen();
@@ -155,12 +168,9 @@ class App extends Component {
         } else {
           this.randomFoodSpot();
           this.goFaster();
-          snakeMod.unshift(nextPixelLeft);
-
-          nextPixelLeft = snakeMod[0] - 1;
         }
 
-        if ((nextPixelLeft + 1) % 21 === 0) {
+        if ((nextPixelLeft + 1) % this.state.ylinesize === 0) {
           this.gameOver();
           break;
         }
@@ -168,7 +178,8 @@ class App extends Component {
         this.setState(
           {
             snake: snakeMod,
-            removePixel: toRemove
+            removePixel: toRemove,
+            keyblock: false
           },
           () => {
             this.updateScreen();
@@ -186,9 +197,6 @@ class App extends Component {
         } else {
           this.randomFoodSpot();
           this.goFaster();
-          snakeMod.unshift(nextPixelUp);
-
-          nextPixelUp = snakeMod[0] - this.state.ylinesize;
         }
 
         if (nextPixelUp < 0) {
@@ -199,7 +207,8 @@ class App extends Component {
         this.setState(
           {
             snake: snakeMod,
-            removePixel: toRemove
+            removePixel: toRemove,
+            keyblock: false
           },
           () => {
             this.updateScreen();
@@ -217,9 +226,6 @@ class App extends Component {
         } else {
           this.randomFoodSpot();
           this.goFaster();
-          snakeMod.unshift(nextPixelDown);
-
-          nextPixelDown = snakeMod[0] + this.state.ylinesize;
         }
 
         if (nextPixelDown >= this.state.pixels.length) {
@@ -230,7 +236,8 @@ class App extends Component {
         this.setState(
           {
             snake: snakeMod,
-            removePixel: toRemove
+            removePixel: toRemove,
+            keyblock: false
           },
           () => {
             this.updateScreen();
@@ -248,7 +255,7 @@ class App extends Component {
       pixelsUpdate[element] = { on: true };
     });
     pixelsUpdate[this.state.removePixel] = { on: false };
-    pixelsUpdate[this.state.food] = { on: true };
+    pixelsUpdate[this.state.food] = { food: true };
 
     this.setState({
       pixels: pixelsUpdate
@@ -275,7 +282,7 @@ class App extends Component {
       <div className="App">
       <div className='screenContainer'>
         <Screen pixels={this.state.pixels} />
-        <div className="score"> Score: {(this.state.snake.length -4)/2}</div>
+        <div className="score"> Score: {(this.state.snake.length -4)}</div>
         <div className='buttonContainer'><button className={this.state.gameStarted  ? 'StartButton hidden':'StartButton' } onClick={this.newGame}>{this.state.gameOver?"Game Over Again?":"Start!"}</button></div>
       </div>
       </div>
