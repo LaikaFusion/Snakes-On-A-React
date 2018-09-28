@@ -36,6 +36,12 @@ class App extends Component {
       return;
     }
     switch (e.key) {
+         case "enter":
+      case "spaceBar":
+         if (this.state.gameOver) {
+        this.newGame();
+       }
+    break;
       case "ArrowLeft":
       case "a":
         if (this.state.direction !== "right") {
@@ -244,12 +250,6 @@ class App extends Component {
           }
         );
         break;
-      case "enter":
-      case "spaceBar":
-         if (this.state.gameOver) {
-        this.newGame();
-       }
-    break;
       default:
         break;
     }
@@ -280,7 +280,8 @@ class App extends Component {
     clearInterval(this.state.intervalID);
     this.setState({
       gameOver: true,
-      gameStarted: false
+      gameStarted: false,
+      keyblock:false
     })
   };
   render() {
