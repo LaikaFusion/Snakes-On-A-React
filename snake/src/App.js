@@ -244,6 +244,12 @@ class App extends Component {
           }
         );
         break;
+      case "enter":
+      case "spaceBar":
+         if (this.state.gameOver) {
+        this.newGame();
+       }
+    break;
       default:
         break;
     }
